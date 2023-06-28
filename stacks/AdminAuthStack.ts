@@ -1,7 +1,7 @@
 import { Cognito, StackContext } from "sst/constructs";
 
 export function AdminAuthStack({ stack }: StackContext) {
-  const auth = new Cognito(stack, "Auth", {
+  const auth = new Cognito(stack, "Admin", {
     cdk: {
       userPool: {
         userPoolName: "AdminUserPool",

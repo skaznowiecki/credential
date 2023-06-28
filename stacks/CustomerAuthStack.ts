@@ -2,7 +2,7 @@ import { Cognito, StackContext, toCdkDuration } from "sst/constructs";
 import { UserPoolEmail } from "aws-cdk-lib/aws-cognito";
 
 export function CustomerAuthStack({ stack }: StackContext) {
-  const auth = new Cognito(stack, "Auth", {
+  const auth = new Cognito(stack, "Customer", {
     cdk: {
       userPool: {
         userPoolName: "CustomerUserPool",
@@ -10,11 +10,11 @@ export function CustomerAuthStack({ stack }: StackContext) {
           minLength: 8,
           requireDigits: true,
         },
-        email: UserPoolEmail.withSES({
-          fromEmail: "no-reply@sanossalud.com",
-          fromName: "no-reply",
-          sesVerifiedDomain: "sanossalud.com",
-        }),
+        // email: UserPoolEmail.withSES({
+        //   fromEmail: "no-reply@sanossalud.com",
+        //   fromName: "no-reply",
+        //   sesVerifiedDomain: "sanossalud.com",
+        // }),
       },
       userPoolClient: {
         refreshTokenValidity: toCdkDuration(`365 days`),

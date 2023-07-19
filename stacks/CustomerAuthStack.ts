@@ -1,5 +1,5 @@
 import { Cognito, StackContext, toCdkDuration } from "sst/constructs";
-import { UserPoolEmail } from "aws-cdk-lib/aws-cognito";
+// import { UserPoolEmail } from "aws-cdk-lib/aws-cognito";
 
 export function CustomerAuthStack({ stack }: StackContext) {
   const auth = new Cognito(stack, "Customer", {

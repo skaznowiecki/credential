@@ -1,9 +1,11 @@
 export interface Credentials {
-  userId: string;
+  id?: string;
   name: string;
-  surname: string;
+  lastName: string;
   dni: string;
+  plan: string;
+  email: string;
   subscribeDate: Date;
-  unsubscribeDate: Date | null;
-  createdAt: Date;
+  unsubscribeDate?: Date | null;
+  createdAt?: Date;
 }

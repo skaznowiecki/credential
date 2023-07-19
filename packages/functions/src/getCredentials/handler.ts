@@ -6,12 +6,12 @@ import { ApiError } from "@credential/core/error";
 import { retrievePath, Validator } from "@credential/core/validator";
 import { GetCommand } from "@aws-sdk/lib-dynamodb";
 import { Table } from "sst/node/table";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 
 export const main = apiHandler<Response, APIEvent>(
   async (event): Promise<Response> => {
-    const { userId, dni } = await retrievePath<Request>(event);
-
-    console.log(`userId: ${userId}, dni: ${dni}`);
+    const userId = "1";
+    const dni = "123";
 
     const command = new GetCommand({
       TableName: Table.Credentials.tableName,

@@ -22,7 +22,7 @@ function Copyright(props: any) {
 
 export default function MainContainer({ children }: any) {
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" disableGutters maxWidth={false}>
       <CssBaseline />
       <Box
         sx={{
@@ -30,6 +30,7 @@ export default function MainContainer({ children }: any) {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          justifyContent: "space-evenly",
         }}
       >
         {children}

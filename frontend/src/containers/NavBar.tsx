@@ -38,7 +38,7 @@ export default function MenuAppBar() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          {isAuthenticated && (
+          {/* {isAuthenticated && (
             <IconButton
               size="large"
               edge="start"
@@ -48,7 +48,7 @@ export default function MenuAppBar() {
             >
               <MenuIcon />
             </IconButton>
-          )}
+          )} */}
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Credenciales
           </Typography>

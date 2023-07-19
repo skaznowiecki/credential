@@ -75,19 +75,19 @@ export default function Home() {
         >
           <Grid item>
             <Button variant="contained" component="label">
-              Alta afiliados
+              Subir Excell
               <input type="file" hidden onChange={handleFileUpload} />
             </Button>
           </Grid>
-          <Grid item>
+          {/* <Grid item>
             <Button variant="contained" component="label">
               Baja afiliados
               <input type="file" hidden onChange={handleFileUpload} />
             </Button>
-          </Grid>
+          </Grid> */}
         </Grid>
         <Box sx={{ mt: 1, borderColor: "secondary", border: "thin" }}>
-          <Grid item xs={12}>
+          <Grid item xs>
             <DataTable rows={rows} />
           </Grid>
         </Box>

@@ -1,27 +1,28 @@
 import React, { useEffect, useRef } from "react";
 import DataTable from "./DataTable";
-import { Box, Grid, Input } from "@mui/material";
+import { Box, Button, Grid, Input } from "@mui/material";
 import * as XLSX from "xlsx";
 import { API } from "aws-amplify";
 import { onError } from "../lib/errorLib";
 
 export default function Home() {
   const [data, setData] = React.useState<any[]>([]);
+  const [rows, setRows] = React.useState<Credentials[]>([]);
   const isMounted = useRef(false);
 
   useEffect(() => {
-    console.log(isMounted.current);
-    if (isMounted.current) {
-      const uploadCredentias = async () => {
-        await createCredentials(data);
-      };
-      try {
-        uploadCredentias();
-      } catch (e) {
-        onError(e);
-      }
-    } else {
-      isMounted.current = true;
+    const firstLoad = async () => {
+      const result = await loadCredentials();
+      console.log("result", result);
+      const columns: Credentials[] = result;
+      setRows(columns);
+    };
+
+    try {
+      firstLoad();
+      console.log(rows);
+    } catch (e) {
+      onError(e);
     }
   }, [data]);
 
@@ -30,19 +31,22 @@ export default function Home() {
     const reader = new FileReader();
     reader.readAsBinaryString(e.target.files![0]);
     reader.onload = (e) => {
+      e.preventDefault();
       const bstr = e?.target?.result;
       const wb = XLSX.read(bstr, { type: "binary" });
       const wsname = wb.SheetNames[0];
       const ws = wb.Sheets[wsname];
-      const data = XLSX.utils.sheet_to_json(ws);
-      setData(data);
+      const info = XLSX.utils.sheet_to_json(ws);
+      API.post("credentials", "/upload", {
+        body: { credentials: info },
+      });
+      setData(info);
     };
   };
 
-  const createCredentials = (credentials: any[]) => {
-    console.log("credentials", credentials);
-    return API.post("credentials", "/upload", {
-      body: { credentials: credentials },
+  const loadCredentials = () => {
+    return API.get("credentials", "/", {
+      headers: {},
     });
   };
 
@@ -65,19 +69,46 @@ export default function Home() {
           spacing={2}
         >
           <Grid item>
-            <h3>Alta afiliados</h3>
-            <Input type="file" onChange={handleFileUpload} />
-            <h1>{data.length > 0 ? data[0].nombre : "test"}</h1>
+            <Button variant="contained" component="label">
+              Alta afiliados
+              <input type="file" hidden onChange={handleFileUpload} />
+            </Button>
           </Grid>
           <Grid item>
-            <h3>Baja afiliados</h3>
+            <Button variant="contained" component="label">
+              Baja afiliados
+              <input type="file" hidden onChange={handleFileUpload} />
+            </Button>
           </Grid>
         </Grid>
-
-        <Grid item xs={12}>
-          <DataTable />
-        </Grid>
+        <Box sx={{ mt: 1, borderColor: "secondary", border: "thin" }}>
+          <Grid item xs={12}>
+            <DataTable rows={rows} />
+          </Grid>
+        </Box>
       </Grid>
     </Box>
   );
 }
+
+export type CredentialEsp = {
+  Nombre: string;
+  Apellido: string;
+  DNI: string;
+  Plan: string;
+  Alta: Date;
+  Email: string;
+  Baja: Date | null;
+};
+
+export type Credentials = {
+  id?: string;
+  name: string;
+  lastName: string;
+  dni: string;
+  plan: string;
+  email: string;
+  subscribeDate: Date;
+  unsubscribeDate?: Date | null;
+  createdAt?: string;
+};

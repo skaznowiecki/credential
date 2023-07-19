@@ -1,16 +1,20 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import {
-  GetCommand,
+  ScanCommand,
   PutCommand,
   BatchWriteCommand,
   DynamoDBDocumentClient,
 } from "@aws-sdk/lib-dynamodb";
 
 const client = new DynamoDBClient({});
-const docClient = DynamoDBDocumentClient.from(client);
+const docClient = DynamoDBDocumentClient.from(client, {
+  marshallOptions: {
+      removeUndefinedValues: true
+  }
+});
 
 export default {
-  get: (params: GetCommand) => docClient.send(params),
+  get: (params: ScanCommand) => docClient.send(params),
   put: (params: PutCommand) => docClient.send(params),
   putBatch: (params: BatchWriteCommand) => docClient.send(params),
   query: (params: any) => docClient.send(params),

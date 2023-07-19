@@ -7,5 +7,5 @@ export interface Credentials {
   email: string;
   subscribeDate: Date;
   unsubscribeDate?: Date | null;
-  createdAt?: Date;
+  createdAt?: string;
 }

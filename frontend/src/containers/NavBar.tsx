@@ -66,7 +66,7 @@ export default function MenuAppBar() {
               </Button>
             </div>
           )}
-          {!isAuthenticated && (
+          {/* {!isAuthenticated && (
             <div>
               <Button
                 size="large"
@@ -89,7 +89,7 @@ export default function MenuAppBar() {
                 Sign Up
               </Button>
             </div>
-          )}
+          )} */}
         </Toolbar>
       </AppBar>
     </Box>

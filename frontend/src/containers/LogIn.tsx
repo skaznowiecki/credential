@@ -120,10 +120,10 @@ export default function LogIn() {
             value={fields.password}
             autoComplete="current-password"
           />
-          <FormControlLabel
+          {/* <FormControlLabel
             control={<Checkbox value="remember" color="primary" />}
             label="Remember me"
-          />
+          /> */}
           {isLoading ? (
             <Grid container justifyContent={"center"}>
               <Grid item sx={{ mt: 3, mb: 2 }}>
@@ -151,11 +151,7 @@ export default function LogIn() {
                 Recuperar Contraseña
               </Button>
             </Grid>
-            <Grid item>
-              <Link href="/signup" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
+           
           </Grid>
         </Box>
       </>

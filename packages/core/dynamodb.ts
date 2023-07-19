@@ -9,7 +9,7 @@ import {
 const client = new DynamoDBClient({});
 const docClient = DynamoDBDocumentClient.from(client, {
   marshallOptions: {
-      removeUndefinedValues: true
+    removeUndefinedValues: true
   }
 });
 

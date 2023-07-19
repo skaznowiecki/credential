@@ -21,14 +21,14 @@ const columns: GridColDef[] = [
   { field: "plan", headerName: "Plan", width: 180 },
   {
     field: "subscribeDate",
-    headerName: "Fecha Inicio",
+    headerName: "Fecha Alta",
     type: "datetime",
     width: 130,
     valueGetter: ({ value }) => value && new Date(value).toLocaleDateString(),
   },
   {
     field: "unsubscribeDate",
-    headerName: "Fecha Fin",
+    headerName: "Fecha Baja",
     type: "datetime",
     width: 130,
     valueGetter: ({ value }) => value && new Date(value).toLocaleDateString(),

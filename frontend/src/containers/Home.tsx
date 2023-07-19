@@ -8,43 +8,48 @@ import { onError } from "../lib/errorLib";
 export default function Home() {
   const [data, setData] = React.useState<any[]>([]);
   const [rows, setRows] = React.useState<Credentials[]>([]);
-  const isMounted = useRef(false);
 
   useEffect(() => {
     const firstLoad = async () => {
       const result = await loadCredentials();
-      console.log("result", result);
-      const columns: Credentials[] = result;
-      setRows(columns);
+      const rows: Credentials[] = result;
+      setRows(rows);
     };
 
     try {
       firstLoad();
-      console.log(rows);
     } catch (e) {
       onError(e);
     }
+
+    return () => {
+      setTimeout(() => firstLoad(), 2000);
+    };
   }, [data]);
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     const reader = new FileReader();
     reader.readAsBinaryString(e.target.files![0]);
-    reader.onload = (e) => {
+    reader.onload = async (e) => {
       e.preventDefault();
       const bstr = e?.target?.result;
       const wb = XLSX.read(bstr, { type: "binary" });
       const wsname = wb.SheetNames[0];
       const ws = wb.Sheets[wsname];
       const info = XLSX.utils.sheet_to_json(ws);
-      API.post("credentials", "/upload", {
-        body: { credentials: info },
-      });
-      setData(info);
+      const resp = await upCredentials(info);
+      setData(resp);
     };
   };
 
-  const loadCredentials = () => {
+  const upCredentials = async (info: any) => {
+    return API.post("credentials", "/upload", {
+      body: { credentials: info },
+    });
+  };
+
+  const loadCredentials = async () => {
     return API.get("credentials", "/", {
       headers: {},
     });
@@ -112,3 +117,6 @@ export type Credentials = {
   unsubscribeDate?: Date | null;
   createdAt?: string;
 };
+function sleep(arg0: number) {
+  throw new Error("Function not implemented.");
+}

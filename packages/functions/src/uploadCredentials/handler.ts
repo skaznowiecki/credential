@@ -43,7 +43,7 @@ const translate = (credential: CredentialEsp[]): Credentials[] => {
     name: credential.Nombre,
     lastName: credential.Apellido,
     subscribeDate: credential.Alta,
-    unsubscribeDate: credential?.Baja,
+    unsubscribeDate: credential?.Baja ? credential.Baja : null,
     plan: credential.Plan,
     email: credential.Email,
     createdAt: new Date().toLocaleDateString(),

@@ -1,4 +1,5 @@
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DeleteCommand } from '@aws-sdk/lib-dynamodb';
 import {
   ScanCommand,
   PutCommand,
@@ -19,5 +20,5 @@ export default {
   putBatch: (params: BatchWriteCommand) => docClient.send(params),
   query: (params: any) => docClient.send(params),
   update: (params: any) => docClient.send(params),
-  delete: (params: any) => docClient.send(params),
+  delete: (params: DeleteCommand) => docClient.send(params),
 };

@@ -12,8 +12,9 @@ export function HttpStack({ stack }: StackContext) {
       },
     },
     routes: {
-      "GET /": "packages/functions/src/getCredentials/handler.main",
-      "POST /upload": "packages/functions/src/uploadCredentials/handler.main",
+      "GET /": "packages/functions/src/admin/get-credentials/handler.main",
+      "POST /upload": "packages/functions/src/admin/upload-credentials/handler.main",
+      "POST /delete": "packages/functions/src/admin/delete-credentials/handler.main",
     },
   });
   stack.addOutputs({

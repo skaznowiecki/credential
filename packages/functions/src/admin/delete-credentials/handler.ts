@@ -4,7 +4,7 @@ import { CredentialEsp, Request } from "./request";
 import { Response } from "./response";
 import { Validator, retrieveBody } from "@credential/core/validator";
 import { Table } from "sst/node/table";
-import { PutCommand } from "@aws-sdk/lib-dynamodb";
+import { DeleteCommand, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { Credentials } from "@credential/core/credentials";
 import { ApiError } from "@credential/core/error";
 
@@ -16,12 +16,12 @@ export const main = apiHandler<Response, APIEvent>(
     const translatedBody = translate(body.credentials);
 
     for (const credential of translatedBody) {
-      const command = new PutCommand({
+      const command = new DeleteCommand({
         TableName: table,
-        Item: credential,
+        Key: credential.dni,
       });
 
-      await dynamoDb.put(command);
+      await dynamoDb.delete(command);
     }
 
     return {
@@ -36,15 +36,8 @@ const validator: Validator<Request> = async (request) => {
   }
 };
 
-const translate = (credential: CredentialEsp[]): Credentials[] => {
+const translate = (credential: CredentialEsp[]): any[] => {
   return credential.map((credential) => ({
-    id: credential.DNI,
     dni: credential.DNI,
-    name: credential.Nombre,
-    lastName: credential.Apellido,
-    subscribeDate: credential.Alta,
-    plan: credential.Plan,
-    email: credential.Email,
-    createdAt: new Date().toLocaleDateString(),
   }));
 };

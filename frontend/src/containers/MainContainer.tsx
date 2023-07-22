@@ -11,6 +11,9 @@ function Copyright(props: any) {
       variant="body2"
       color="text.secondary"
       align="center"
+      position="absolute"
+      bottom="0px"
+      mb={3}
       {...props}
     >
       {"Copyright © "}
@@ -34,8 +37,8 @@ export default function MainContainer({ children }: any) {
         }}
       >
         {children}
+        <Copyright />
       </Box>
-      <Copyright sx={{ mt: 15 }} />
     </Container>
   );
 }

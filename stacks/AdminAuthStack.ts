@@ -6,7 +6,6 @@ import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 
 export function AdminAuthStack({ stack }: StackContext) {
   const { api } = use(HttpStack);
-  const { table } = use(StorageStack);
 
   const auth = new Cognito(stack, "Admin", {
     cdk: {
@@ -21,12 +20,6 @@ export function AdminAuthStack({ stack }: StackContext) {
     },
     login: ["email"],
   });
-
-  // const tablePolicy = new PolicyStatement({
-  //   actions: ["dynamodb:*"],
-  //   effect: Effect.ALLOW,
-  //   resources: [table.tableArn],
-  // });
 
   auth.attachPermissionsForAuthUsers(stack, [api, "dynamodb"]);
   api.attachPermissions(["dynamodb:*"]);

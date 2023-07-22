@@ -1,6 +1,6 @@
 import * as React from "react";
 import { DataGrid, GridColDef, GridToolbarQuickFilter } from "@mui/x-data-grid";
-import { Box } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 import { Credentials } from "./Home";
 
 //declare table props
@@ -9,26 +9,19 @@ interface TableProps {
 }
 
 const columns: GridColDef[] = [
-  { field: "name", headerName: "Nombre", width: 130 },
-  { field: "lastName", headerName: "Apellido", width: 130 },
   {
     field: "dni",
     headerName: "DNI",
     type: "number",
-    width: 90,
+    width: 110,
   },
+  { field: "name", headerName: "Nombre", width: 130 },
+  { field: "lastName", headerName: "Apellido", width: 130 },
   { field: "email", headerName: "Email", width: 180 },
   { field: "plan", headerName: "Plan", width: 180 },
   {
-    field: "subscribeDate",
+    field: "createdAt",
     headerName: "Fecha Alta",
-    type: "datetime",
-    width: 130,
-    valueGetter: ({ value }) => value && new Date(value).toLocaleDateString(),
-  },
-  {
-    field: "unsubscribeDate",
-    headerName: "Fecha Baja",
     type: "datetime",
     width: 130,
     valueGetter: ({ value }) => value && new Date(value).toLocaleDateString(),
@@ -49,10 +42,13 @@ function QuickSearchToolbar() {
 }
 
 export default function DataTable({ rows }: TableProps) {
+  const idRows = rows.map((row) => {
+    return { ...row, id: row.dni };
+  });
+
   return (
-    // <div style={{ height: 600, width: "100%" }}>
       <DataGrid
-        rows={rows}
+        rows={idRows}
         columns={columns}
         initialState={{
           pagination: {
@@ -66,6 +62,6 @@ export default function DataTable({ rows }: TableProps) {
         slots={{ toolbar: QuickSearchToolbar }}
         pageSizeOptions={[10, 15]}
       />
-    // </div>
+
   );
 }

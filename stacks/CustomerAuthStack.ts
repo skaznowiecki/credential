@@ -1,7 +1,18 @@
-import { Cognito, StackContext, toCdkDuration } from "sst/constructs";
+import {
+  Cognito,
+  Function,
+  StackContext,
+  TableConsumerProps,
+  toCdkDuration,
+  use,
+} from "sst/constructs";
+import { StorageStack } from "./StorageStack";
+import { StartingPosition } from "aws-cdk-lib/aws-lambda";
 // import { UserPoolEmail } from "aws-cdk-lib/aws-cognito";
 
 export function CustomerAuthStack({ stack }: StackContext) {
+  const { table } = use(StorageStack);
+
   const auth = new Cognito(stack, "Customer", {
     cdk: {
       userPool: {
@@ -22,6 +33,23 @@ export function CustomerAuthStack({ stack }: StackContext) {
     },
     login: ["email"],
   });
+
+  const consumer: TableConsumerProps = {
+    function: {
+      handler: "packages/functions/src/add-credentials/handler.main",
+      timeout: 30,
+      bind: [auth, table],
+      permissions: [table],
+    },
+    cdk: {
+      eventSource: {
+        batchSize: 10,
+        startingPosition: StartingPosition.LATEST,
+      },
+    },
+  };
+
+  table.addConsumers(stack, { consumer });
 
   stack.addOutputs({
     UserPoolId: auth.userPoolId,

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import DataTable from "./DataTable";
-import { Box, Button, Grid, Input } from "@mui/material";
+import { Box, Button, Grid, Input, Paper, Typography } from "@mui/material";
 import * as XLSX from "xlsx";
 import { API } from "aws-amplify";
 import { onError } from "../lib/errorLib";
@@ -64,7 +64,7 @@ export default function Home() {
         alignItems="center"
       >
         <Grid item xs={12}>
-          <h1>Afiliados</h1>
+          <Typography variant="h2">Afiliados</Typography>
         </Grid>
         <Grid
           container
@@ -87,9 +87,11 @@ export default function Home() {
           </Grid> */}
         </Grid>
         <Box sx={{ mt: 1, borderColor: "secondary", border: "thin" }}>
-          <Grid item xs>
-            <DataTable rows={rows} />
-          </Grid>
+          <Paper elevation={3}>
+            <Grid item xs>
+              <DataTable rows={rows} />
+            </Grid>
+          </Paper>
         </Box>
       </Grid>
     </Box>

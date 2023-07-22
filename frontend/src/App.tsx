@@ -7,6 +7,7 @@ import { Auth } from "aws-amplify";
 import CircularProgress from "@mui/material/CircularProgress";
 import MainContainer from "./containers/MainContainer";
 import { onError } from "./lib/errorLib";
+import { Box } from "@mui/material";
 
 function App(): JSX.Element {
   const [isAuthenticating, setIsAuthenticating] = useState(true);
@@ -29,14 +30,14 @@ function App(): JSX.Element {
   }
 
   return (
-    <div>
+    <Box height="100vh">
       <AppContext.Provider value={{ isAuthenticated, userHasAuthenticated }}>
         <NavBar />
         <MainContainer>
           {isAuthenticating ? <CircularProgress /> : <Routes />}
         </MainContainer>
       </AppContext.Provider>
-    </div>
+    </Box>
   );
 }
 

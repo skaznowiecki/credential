@@ -13,12 +13,15 @@ export const main = apiHandler<Response, APIEvent>(
     const table = Table.Credentials.tableName;
 
     const body = await retrieveBody<Request>(event, validator);
+
     const translatedBody = translate(body.credentials);
 
     for (const credential of translatedBody) {
       const command = new DeleteCommand({
         TableName: table,
-        Key: credential.dni,
+        Key: {
+          dni: credential.dni,
+        },
       });
 
       await dynamoDb.delete(command);

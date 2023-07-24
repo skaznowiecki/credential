@@ -17,10 +17,11 @@ export default function Home() {
     };
 
     try {
-      firstLoad();
+      setTimeout(() => firstLoad(), 2000);
     } catch (e) {
       onError(e);
     }
+
   }, [data]);
 
   const handleUpCredentials = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,7 +60,7 @@ export default function Home() {
   };
 
   const downCredentials = async (info: any) => {
-    API.post("credentials", "/upload", {
+    API.post("credentials", "/delete", {
       body: { credentials: info },
     });
     setData(!data);

@@ -14,22 +14,24 @@ export const main: DynamoDBStreamHandler = async (
   const auth = process.env.USER_POOL_ID || "";
   var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
 
+  console.log("EVENT", event.Records);
   event.Records.forEach((record) => {
     if (record.eventName == "REMOVE") {
-      let object = unmarshall(record.dynamodb.NewImage);
+      let object = unmarshall(record.dynamodb.OldImage);
 
+      console.log("OBJECT", object);
       var params: AWS.CognitoIdentityServiceProvider.AdminDeleteUserRequest = {
         UserPoolId: auth,
         Username: object.email,
       };
 
-      cognitoidentityserviceprovider.adminCreateUser(
-        params,
-        function (err, data) {
-          if (err) console.log("ERROR", err, err.stack); // an error occurred
-          else console.log(data); // successful response
-        }
-      );
+      // cognitoidentityserviceprovider.adminDeleteUser(
+      //   params,
+      //   function (err, data) {
+      //     if (err) console.log("ERROR", err, err.stack); // an error occurred
+      //     else console.log(data); // successful response
+      //   }
+      // );
     }
   });
 };

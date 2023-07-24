@@ -68,13 +68,38 @@ export function CustomerAuthStack({ stack }: StackContext) {
       eventSource: {
         batchSize: 10,
         startingPosition: StartingPosition.LATEST,
+        filters: [
+          {
+            pattern: JSON.stringify({
+              eventName: ["INSERT"],
+              dynamodb: {
+                NewImage: {
+                  email: {
+                    S: "*",
+                  },
+                  name: {
+                    S: "*",
+                  },
+                  lastName: {
+                    S: "*",
+                  },
+                  dni: {
+                    S: "*",
+                  },
+                },
+                StreamViewType: "NEW_AND_OLD_IMAGES",
+              },
+            }),
+          },
+        ],
       },
     },
   };
 
   const deleteCredential: TableConsumerProps = {
     function: {
-      handler: "packages/functions/src/customers/delete-credentials/handler.main",
+      handler:
+        "packages/functions/src/customers/delete-credentials/handler.main",
       timeout: 30,
       bind: [table],
       environment: {
@@ -88,11 +113,29 @@ export function CustomerAuthStack({ stack }: StackContext) {
       eventSource: {
         batchSize: 10,
         startingPosition: StartingPosition.LATEST,
+        filters: [
+          {
+            pattern: JSON.stringify({
+              eventName: ["REMOVE"],
+              dynamodb: {
+                OldImage: {
+                  dni: {
+                    S: "*",
+                  },
+                },
+                StreamViewType: "NEW_AND_OLD_IMAGES",
+              },
+            }),
+          },
+        ],
       },
     },
   };
 
-  table.addConsumers(stack, { consumer: addCredential });
+  table.addConsumers(stack, {
+    consumer1: addCredential,
+    consumer2: deleteCredential,
+  });
   auth.attachPermissionsForAuthUsers(stack, ["cognito-idp:*"]);
 
   stack.addOutputs({

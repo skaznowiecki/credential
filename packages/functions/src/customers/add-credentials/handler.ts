@@ -43,13 +43,13 @@ export const main: DynamoDBStreamHandler = async (
         ],
       };
 
-      cognitoidentityserviceprovider.adminCreateUser(
-        params,
-        function (err, data) {
-          if (err) console.log("ERROR", err, err.stack); // an error occurred
-          else console.log(data); // successful response
-        }
-      );
+      // cognitoidentityserviceprovider.adminCreateUser(
+      //   params,
+      //   function (err, data) {
+      //     if (err) console.log("ERROR", err, err.stack); // an error occurred
+      //     else console.log(data); // successful response
+      //   }
+      // );
     }
   });
 };

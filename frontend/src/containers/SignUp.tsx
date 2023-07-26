@@ -84,7 +84,6 @@ export default function SignUp() {
     setIsResending(true);
 
     try {
-      console.log(fields.confirmationEmail);
       await Auth.resendSignUp(fields.confirmationEmail);
       onError("Código reenviado")
     } catch (e) {

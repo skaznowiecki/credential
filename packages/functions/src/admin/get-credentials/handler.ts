@@ -15,7 +15,6 @@ export const main = apiHandler<Response, APIEvent>(
 
     const result = await dynamoDb.get(command);
 
-    console.log(`result: ${JSON.stringify(result)}`);
     if (!result.Items) {
       throw new ApiError(`NOT FOUND`, 404);
     }

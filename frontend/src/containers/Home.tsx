@@ -6,6 +6,7 @@ import { API } from "aws-amplify";
 import { onError } from "../lib/errorLib";
 
 export default function Home() {
+  const [first, setFirst] = React.useState<boolean>(true);
   const [data, setData] = React.useState<boolean>(false);
   const [rows, setRows] = React.useState<Credentials[]>([]);
 
@@ -17,11 +18,15 @@ export default function Home() {
     };
 
     try {
-      setTimeout(() => firstLoad(), 2000);
+      if (!first) {
+        console.log("ENTRO");
+        setTimeout(() => firstLoad(), 4000);
+      }
+      firstLoad();
     } catch (e) {
       onError(e);
     }
-
+    setFirst(false);
   }, [data]);
 
   const handleUpCredentials = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,6 +41,7 @@ export default function Home() {
       const info = XLSX.utils.sheet_to_json(ws);
       await upCredentials(info);
     };
+    setData(!data);
   };
 
   const handleDownCredentials = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,20 +56,19 @@ export default function Home() {
       const info = XLSX.utils.sheet_to_json(ws);
       await downCredentials(info);
     };
+    setData(!data);
   };
 
   const upCredentials = async (info: any) => {
     API.post("credentials", "/upload", {
       body: { credentials: info },
     });
-    setData(!data);
   };
 
   const downCredentials = async (info: any) => {
     API.post("credentials", "/delete", {
       body: { credentials: info },
     });
-    setData(!data);
   };
 
   const loadCredentials = async () => {

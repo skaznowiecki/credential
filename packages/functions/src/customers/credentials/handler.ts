@@ -15,10 +15,11 @@ export const main: DynamoDBStreamHandler = async (
   var cognitoidentityserviceprovider = new AWS.CognitoIdentityServiceProvider();
 
   event.Records.forEach((record) => {
+    console.log("EVENT", record);
     if (record.eventName == "INSERT") {
       let object = unmarshall(record.dynamodb.NewImage);
 
-      var params: AWS.CognitoIdentityServiceProvider.AdminCreateUserRequest = {
+      let params: AWS.CognitoIdentityServiceProvider.AdminCreateUserRequest = {
         UserPoolId: auth,
         Username: object.email,
         DesiredDeliveryMediums: ["EMAIL"],
@@ -44,6 +45,22 @@ export const main: DynamoDBStreamHandler = async (
       };
 
       // cognitoidentityserviceprovider.adminCreateUser(
+      //   params,
+      //   function (err, data) {
+      //     if (err) console.log("ERROR", err, err.stack); // an error occurred
+      //     else console.log(data); // successful response
+      //   }
+      // );
+    } else if (record.eventName == "REMOVE") {
+      let object = unmarshall(record.dynamodb.OldImage);
+
+      console.log("OBJECT", object);
+      let params: AWS.CognitoIdentityServiceProvider.AdminDeleteUserRequest = {
+        UserPoolId: auth,
+        Username: object.email,
+      };
+
+      // cognitoidentityserviceprovider.adminDeleteUser(
       //   params,
       //   function (err, data) {
       //     if (err) console.log("ERROR", err, err.stack); // an error occurred

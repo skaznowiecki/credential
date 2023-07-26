@@ -50,7 +50,6 @@ export default function LogIn() {
 
     try {
       const data = await Auth.forgotPassword(fields.email);
-      console.log(data);
     } catch (e) {
       onError(e);
       setIsRecovering(false);

@@ -12,7 +12,7 @@ export function StorageStack({ stack, app }: StackContext) {
       createdAt: "string",
     },
     primaryIndex: { partitionKey: "dni" },
-    stream: "new_and_old_images",
+    stream: true,
   });
 
   return {

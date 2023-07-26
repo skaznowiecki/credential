@@ -1,6 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import DataTable from "./DataTable";
-import { Box, Button, Grid, Input, Paper, Typography } from "@mui/material";
+import { Box, Button, Grid, Paper, Typography } from "@mui/material";
 import * as XLSX from "xlsx";
 import { API } from "aws-amplify";
 import { onError } from "../lib/errorLib";
@@ -17,16 +17,21 @@ export default function Home() {
       setRows(rows);
     };
 
+    const interval = setInterval(() => firstLoad(), 5000);
     try {
-      if (!first) {
-        console.log("ENTRO");
-        setTimeout(() => firstLoad(), 4000);
-      }
+      // if (!first) {
+      //   console.log("ASDASDASDS");
+      //   setTimeout(() => firstLoad(), 3000);
+      // }
       firstLoad();
     } catch (e) {
       onError(e);
     }
+
     setFirst(false);
+    return () => {
+      clearInterval(interval);
+    };
   }, [data]);
 
   const handleUpCredentials = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,9 +44,11 @@ export default function Home() {
       const wsname = wb.SheetNames[0];
       const ws = wb.Sheets[wsname];
       const info = XLSX.utils.sheet_to_json(ws);
-      await upCredentials(info);
+      upCredentials(info);
     };
-    setData(!data);
+    reader.onloadend = () => {
+      setData((prevState) => !prevState);
+    };
   };
 
   const handleDownCredentials = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,21 +61,25 @@ export default function Home() {
       const wsname = wb.SheetNames[0];
       const ws = wb.Sheets[wsname];
       const info = XLSX.utils.sheet_to_json(ws);
-      await downCredentials(info);
+      downCredentials(info);
     };
-    setData(!data);
+    reader.onloadend = () => {
+      setData((prevState) => !prevState);
+    };
   };
 
   const upCredentials = async (info: any) => {
-    API.post("credentials", "/upload", {
+    await API.post("credentials", "/upload", {
       body: { credentials: info },
     });
+    // setData((prevState) => !prevState);
   };
 
   const downCredentials = async (info: any) => {
-    API.post("credentials", "/delete", {
+    await API.post("credentials", "/delete", {
       body: { credentials: info },
     });
+    // setData((prevState) => !prevState);
   };
 
   const loadCredentials = async () => {

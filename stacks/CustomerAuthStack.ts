@@ -10,7 +10,7 @@ import {
 import { StorageStack } from "./StorageStack";
 import { StartingPosition } from "aws-cdk-lib/aws-lambda";
 import * as iam from "aws-cdk-lib/aws-iam";
-import { Effect, Policy, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { StringAttribute } from "aws-cdk-lib/aws-cognito";
 
 export function CustomerAuthStack({ stack }: StackContext) {
@@ -66,13 +66,12 @@ export function CustomerAuthStack({ stack }: StackContext) {
     },
     cdk: {
       eventSource: {
-        batchSize: 10,
+        batchSize: 50,
+        maxBatchingWindow: toCdkDuration("60 seconds"),
         startingPosition: StartingPosition.LATEST,
       },
     },
   };
-
-
 
   table.addConsumers(stack, {
     consumer: credential,

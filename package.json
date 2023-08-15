@@ -20,5 +20,8 @@
   },
   "workspaces": [
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "@aws-sdk/client-cognito-identity-provider": "^3.391.0"
+  }
 }

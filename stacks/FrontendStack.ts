@@ -1,7 +1,7 @@
 import { StackContext, StaticSite, use } from "sst/constructs";
-import { HttpStack } from "./HttpStack";
-import { AdminAuthStack } from "./AdminAuthStack";
-import { StorageStack } from "./StorageStack";
+import { HttpStack } from "./HttpStack.js";
+import { AdminAuthStack } from "./AdminAuthStack.js";
+import { StorageStack } from "./StorageStack.js";
 
 export function FrontendStack({ stack, app }: StackContext) {
   const { api } = use(HttpStack);

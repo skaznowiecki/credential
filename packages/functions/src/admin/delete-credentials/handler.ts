@@ -5,7 +5,7 @@ import { Response } from "./response";
 import { Validator, retrieveBody } from "@credential/core/validator";
 import { Table } from "sst/node/table";
 import { DeleteCommand, PutCommand } from "@aws-sdk/lib-dynamodb";
-import { Credentials } from "@credential/core/credentials";
+import { Credential } from "@credential/core/credentials";
 import { ApiError } from "@credential/core/error";
 
 export const main = apiHandler<Response, APIEvent>(

@@ -5,7 +5,7 @@ import { Response } from "./response";
 import { Validator, retrieveBody } from "@credential/core/validator";
 import { Table } from "sst/node/table";
 import { PutCommand } from "@aws-sdk/lib-dynamodb";
-import { Credentials } from "@credential/core/credentials";
+import { Credential } from "@credential/core/credentials";
 import { ApiError } from "@credential/core/error";
 
 export const main = apiHandler<Response, APIEvent>(
@@ -36,7 +36,7 @@ const validator: Validator<Request> = async (request) => {
   }
 };
 
-const translate = (credential: CredentialEsp[]): Credentials[] => {
+const translate = (credential: CredentialEsp[]): Credential[] => {
   return credential.map((credential) => ({
     dni: credential.DNI,
     name: credential.Nombre,

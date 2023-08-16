@@ -1,6 +1,6 @@
 import { Cognito, StackContext, use } from "sst/constructs";
-import { HttpStack } from "./HttpStack";
-import { StorageStack } from "./StorageStack";
+import { HttpStack } from "./HttpStack.js";
+import { StorageStack } from "./StorageStack.js";
 import { aws_cognito as cognito } from "aws-cdk-lib";
 import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
 

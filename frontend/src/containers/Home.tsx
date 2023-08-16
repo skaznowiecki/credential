@@ -6,29 +6,25 @@ import { API } from "aws-amplify";
 import { onError } from "../lib/errorLib";
 
 export default function Home() {
-  const [first, setFirst] = React.useState<boolean>(true);
   const [data, setData] = React.useState<boolean>(false);
   const [rows, setRows] = React.useState<Credentials[]>([]);
 
   useEffect(() => {
     const firstLoad = async () => {
-      const result = await loadCredentials();
+      const result = await API.get("credentials", "/", {
+        headers: {},
+      });
       const rows: Credentials[] = result;
       setRows(rows);
     };
 
     const interval = setInterval(() => firstLoad(), 5000);
     try {
-      // if (!first) {
-      //   console.log("ASDASDASDS");
-      //   setTimeout(() => firstLoad(), 3000);
-      // }
       firstLoad();
     } catch (e) {
       onError(e);
     }
 
-    setFirst(false);
     return () => {
       clearInterval(interval);
     };
@@ -69,23 +65,27 @@ export default function Home() {
   };
 
   const upCredentials = async (info: any) => {
-    await API.post("credentials", "/upload", {
-      body: { credentials: info },
-    });
-    // setData((prevState) => !prevState);
+    try {
+      await API.post("credentials", "/upload", {
+        body: { credentials: info },
+      });
+    } catch (error) {
+      onError(error);
+    } finally {
+      setData((prevState) => !prevState);
+    }
   };
 
   const downCredentials = async (info: any) => {
-    await API.post("credentials", "/delete", {
-      body: { credentials: info },
-    });
-    // setData((prevState) => !prevState);
-  };
-
-  const loadCredentials = async () => {
-    return API.get("credentials", "/", {
-      headers: {},
-    });
+    try {
+      await API.post("credentials", "/delete", {
+        body: { credentials: info },
+      });
+    } catch (error) {
+      onError(error);
+    } finally {
+      setData((prevState) => !prevState);
+    }
   };
 
   return (

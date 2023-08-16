@@ -1,4 +1,4 @@
-export interface Credentials {
+export interface Credential {
   dni: string;
   name: string;
   lastName: string;

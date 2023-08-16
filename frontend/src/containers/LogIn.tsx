@@ -49,7 +49,7 @@ export default function LogIn() {
     });
 
     try {
-      const data = await Auth.forgotPassword(fields.email);
+      await Auth.forgotPassword(fields.email);
     } catch (e) {
       onError(e);
       setIsRecovering(false);

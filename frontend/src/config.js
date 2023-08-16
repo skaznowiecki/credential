@@ -2,7 +2,7 @@ const config = {
     // Backend config
     dynamo: {
       REGION: process.env.REACT_APP_REGION,
-      TABLE: process.env.REACt_APP_TABLE,
+      TABLE: process.env.REACT_APP_TABLE,
     },
     apiGateway: {
       REGION: process.env.REACT_APP_REGION,

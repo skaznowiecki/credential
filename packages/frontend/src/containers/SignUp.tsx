@@ -21,7 +21,7 @@ export default function SignUp() {
   const { isAuthenticated, userHasAuthenticated } = useAppContext();
   const [newUser, setNewUser] = useState<CognitoUser | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isResending, setIsResending] = useState(false);
+  const [, setIsResending] = useState(false);
   const [fields, setFields] = useState({
     email: "",
     password: "",

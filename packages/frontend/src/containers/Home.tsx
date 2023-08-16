@@ -152,6 +152,4 @@ export type Credentials = {
   unsubscribeDate?: Date | null;
   createdAt?: string;
 };
-function sleep(arg0: number) {
-  throw new Error("Function not implemented.");
-}
+

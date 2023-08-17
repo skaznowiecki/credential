@@ -1,6 +1,6 @@
 import * as React from "react";
 import { DataGrid, GridColDef, GridToolbarQuickFilter } from "@mui/x-data-grid";
-import { Box, Paper } from "@mui/material";
+import { Box } from "@mui/material";
 import { Credentials } from "./Home";
 
 //declare table props

@@ -9,7 +9,7 @@ export function FrontendStack({ stack, app }: StackContext) {
   const { table } = use(StorageStack);
 
   const site = new StaticSite(stack, "ReactSite", {
-    path: "fpackages/rontend",
+    path: "packages/frontend",
     buildOutput: "build",
     buildCommand: "npm run build",
     environment: {

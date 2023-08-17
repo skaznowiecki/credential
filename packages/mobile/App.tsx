@@ -13,7 +13,6 @@ import * as React from "react";
 import SplashScreen from "./screens/SplashScreen";
 import HomeScreen from "./screens/HomeScreen";
 import { AuthContextType, LoginForm, AuthContext } from "./context/context";
-import NewPasswordScreen from "./screens/NewPasswordScreen";
 import ForgotPasswordScreen from "./screens/ForgotPasswordScreen";
 import CreateNewPasswordScreen from "./screens/CreateNewPasswordScreen";
 
@@ -143,14 +142,6 @@ export default function App() {
                 <Stack.Screen
                   name="LogIn"
                   component={LoginScreen}
-                  options={{
-                    animationTypeForReplace: state.isSignout ? "pop" : "push",
-                    headerShown: false,
-                  }}
-                />
-                <Stack.Screen
-                  name="NewPass"
-                  component={NewPasswordScreen}
                   options={{
                     animationTypeForReplace: state.isSignout ? "pop" : "push",
                     headerShown: false,

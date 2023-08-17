@@ -38,13 +38,7 @@ export default function HomeScreen() {
     username: "",
     attributes: {},
   });
-  const [credential, setCredential] = useState<Credential>({
-    dni: "",
-    name: "",
-    lastName: "",
-    plan: "",
-    email: "",
-  });
+  const [isLoading, setIsLoading] = useState<Boolean>(true);
 
   React.useEffect(() => {
     const getUserData = async () => {
@@ -56,6 +50,8 @@ export default function HomeScreen() {
       getUserData();
     } catch (error: any) {
       Alert.alert("Error", error.message);
+    } finally {
+      setIsLoading(false);
     }
   }, []);
 
@@ -76,46 +72,55 @@ export default function HomeScreen() {
           <CredBrand>Sanos Salud</CredBrand>
           <CredHeading>Credencial</CredHeading>
           <Center>
-            <Box
-              rounded="lg"
-              overflow="hidden"
-              borderColor="coolGray.200"
-              borderWidth="1"
-              _dark={{
-                borderColor: "coolGray.600",
-                backgroundColor: "gray.700",
-              }}
-              _light={{
-                backgroundColor: "gray.50",
-              }}
-              width="90%"
-              padding={5}
-            >
-              <Text key={"name"} bold>
-                {userData.attributes["given_name"]}
-              </Text>
-              <Text key={"lastNAme"} bold>
-                {userData.attributes["family_name"]}
-              </Text>
-              <Text key={"dni"} bold>
-                {userData.attributes["custom:dni"]}
-              </Text>
-              <Text
-                key={"plan"}
-                italic
-                _light={{
-                  color: "violet.500",
-                }}
+            {isLoading ? (
+              <HStack space={2} justifyContent="center">
+                <Spinner accessibilityLabel="Loading posts" size="lg" />
+                <Heading color="primary.500" fontSize="md">
+                  Cargando...
+                </Heading>
+              </HStack>
+            ) : (
+              <Box
+                rounded="lg"
+                overflow="hidden"
+                borderColor="coolGray.200"
+                borderWidth="1"
                 _dark={{
-                  color: "violet.400",
+                  borderColor: "coolGray.600",
+                  backgroundColor: "gray.700",
                 }}
+                _light={{
+                  backgroundColor: "gray.50",
+                }}
+                width="90%"
+                padding={5}
               >
-                {"Plan"}: {userData.attributes["custom:plan"]}
-              </Text>
-              <Text key={"email"} italic>
-                {"Email"}: {userData.attributes["email"]}
-              </Text>
-            </Box>
+                <Text key={"name"} bold fontSize="lg">
+                  {userData.attributes["given_name"]}
+                </Text>
+                <Text key={"lastNAme"} bold fontSize="lg">
+                  {userData.attributes["family_name"]}
+                </Text>
+                <Text key={"dni"} fontSize="md">
+                  {userData.attributes["custom:dni"]}
+                </Text>
+                <Text
+                  key={"plan"}
+                  fontSize="xl"
+                  _light={{
+                    color: "violet.500",
+                  }}
+                  _dark={{
+                    color: "violet.400",
+                  }}
+                >
+                  {"Plan"}: {userData.attributes["custom:plan"]}
+                </Text>
+                <Text key={"email"} italic fontSize="md">
+                  {"Email"}: {userData.attributes["email"]}
+                </Text>
+              </Box>
+            )}
           </Center>
         </VStack>
         <VStack>

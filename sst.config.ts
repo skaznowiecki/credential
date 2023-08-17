@@ -4,7 +4,6 @@ import { StorageStack } from "./stacks/StorageStack";
 import { HttpStack } from "./stacks/HttpStack";
 import { FrontendStack } from "./stacks/FrontendStack";
 import { SSTConfig } from "sst";
-import { MobileStack } from "./stacks/MobileStack";
 
 export default {
   config(_input) {
@@ -17,7 +16,6 @@ export default {
     app
       .stack(StorageStack)
       .stack(HttpStack)
-      .stack(MobileStack)
       .stack(AdminAuthStack)
       .stack(CustomerAuthStack)
       .stack(FrontendStack);

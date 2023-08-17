@@ -41,6 +41,6 @@ const validator: Validator<Request> = async (request) => {
 
 const translate = (credential: CredentialEsp[]): any[] => {
   return credential.map((credential) => ({
-    dni: credential.DNI,
+    dni: credential.DNI.toString(),
   }));
 };

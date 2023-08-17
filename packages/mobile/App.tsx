@@ -24,17 +24,9 @@ const awsconfig = {
     userPoolId: process.env.USER_POOL_ID,
     identityPoolId: process.env.IDENTITY_POOL_ID,
     userPoolWebClientId: process.env.APP_CLIENT_ID,
-  },
-  API: {
-    endpoints: [
-      {
-        name: "credentials",
-        endpoint: __DEV__ ? process.env.DEV_API_URL : process.env.PROD_API_URL,
-        region: process.env.REGION,
-      },
-    ],
-  },
+  }
 };
+
 Amplify.configure(awsconfig);
 Auth.configure(awsconfig);
 const Stack = createNativeStackNavigator();
@@ -50,15 +42,13 @@ export enum Kind {
   SIGN_OUT = "SIGN_OUT",
 }
 
-function App() {
+export default function App() {
   const colorScheme = useColorScheme();
   const authContext: AuthContextType = React.useMemo(
     () => ({
-      signIn: async ({ email, password }: LoginForm): Promise<any> => {
+      signIn: async ({ user }: any): Promise<any> => {
         try {
-          const user = await Auth.signIn(email, password);
-          dispatch({ type: Kind.SIGN_IN, token: user });
-          return user;
+          dispatch({ type: Kind.SIGN_IN, token: "user" });
         } catch (error) {
           Alert.alert("Error", "Usuario no existe");
         }
@@ -81,7 +71,7 @@ function App() {
         dispatch({ type: Kind.RESTORE_TOKEN, token: null });
       },
       newPass: async (user: any) => {
-        dispatch({ type: Kind.RESTORE_TOKEN, token: user });
+        dispatch({ type: Kind.SIGN_IN, token: user });
       },
     }),
     []
@@ -101,12 +91,14 @@ function App() {
             ...prevState,
             isSignout: false,
             userToken: action.token,
+            isLoading: false,
           };
         case "SIGN_OUT":
           return {
             ...prevState,
             isSignout: true,
             userToken: null,
+            isLoading: false,
           };
       }
     },
@@ -124,6 +116,8 @@ function App() {
 
         if (data) {
           dispatch({ type: Kind.RESTORE_TOKEN, token: data });
+        } else {
+          dispatch({ type: Kind.RESTORE_TOKEN, token: null });
         }
       } catch (error) {
         dispatch({ type: Kind.RESTORE_TOKEN, token: null });
@@ -193,5 +187,3 @@ function App() {
     </NativeBaseProvider>
   );
 }
-
-export default App;

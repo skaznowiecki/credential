@@ -1,10 +1,22 @@
 import React, { useState } from "react";
-import { View, Button, Text, Flex, VStack, Box } from "native-base";
+import {
+  View,
+  Button,
+  Text,
+  Flex,
+  VStack,
+  Box,
+  HStack,
+  Heading,
+  Spinner,
+  Center,
+} from "native-base";
 import { CredButton } from "../components/CredButton";
 import { AuthContext, AuthContextType } from "../context/context";
 import { CredBrand } from "../components/CredBrand";
 import { CredHeading } from "../components/CredHeading";
 import { API, Auth } from "aws-amplify";
+import { Alert, KeyboardAvoidingView, Platform } from "react-native";
 
 type CognitoUser = {
   username: string;
@@ -38,20 +50,21 @@ export default function HomeScreen() {
     const getUserData = async () => {
       const user: CognitoUser = await Auth.currentUserInfo();
       setUserData(user);
-      const dni = user.attributes["dni"];
-      const url = __DEV__ ? process.env.DEV_API_URL : process.env.PROD_API_URL;
-      const resp = await API.get("credentials", `${url}/credentials/${dni}`, {
-        headers: {},
-      });
-      const credential = await resp.json();
-      setCredential(credential);
     };
 
-    getUserData();
+    try {
+      getUserData();
+    } catch (error: any) {
+      Alert.alert("Error", error.message);
+    }
   }, []);
 
   return (
-    <View>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{ flexGrow: 1 }}
+      keyboardVerticalOffset={500}
+    >
       <Flex
         safeArea
         flex={1}
@@ -62,40 +75,53 @@ export default function HomeScreen() {
         <VStack>
           <CredBrand>Sanos Salud</CredBrand>
           <CredHeading>Credencial</CredHeading>
-          <Box
-            paddingTop={10}
-            bg={{
-              linearGradient: {
-                colors: ["lightBlue.300", "violet.800"],
-                start: [0, 0],
-                end: [1, 0],
-              },
-            }}
-            p="12"
-            rounded="xl"
-            _text={{
-              fontSize: "md",
-              fontWeight: "medium",
-              color: "warmGray.50",
-              textAlign: "center",
-            }}
-          >
-            {Object.keys(userData.attributes).map((key) => {
-              return (
-                <Text key={key}>
-                  {key}: {userData.attributes[key]}
-                </Text>
-              );
-            })}
-            {Object.keys(credential).map((key) => {
-              return <Text key={key}>{key}: credential.key</Text>;
-            })}
-          </Box>
+          <Center>
+            <Box
+              rounded="lg"
+              overflow="hidden"
+              borderColor="coolGray.200"
+              borderWidth="1"
+              _dark={{
+                borderColor: "coolGray.600",
+                backgroundColor: "gray.700",
+              }}
+              _light={{
+                backgroundColor: "gray.50",
+              }}
+              width="90%"
+              padding={5}
+            >
+              <Text key={"name"} bold>
+                {userData.attributes["given_name"]}
+              </Text>
+              <Text key={"lastNAme"} bold>
+                {userData.attributes["family_name"]}
+              </Text>
+              <Text key={"dni"} bold>
+                {userData.attributes["custom:dni"]}
+              </Text>
+              <Text
+                key={"plan"}
+                italic
+                _light={{
+                  color: "violet.500",
+                }}
+                _dark={{
+                  color: "violet.400",
+                }}
+              >
+                {"Plan"}: {userData.attributes["custom:plan"]}
+              </Text>
+              <Text key={"email"} italic>
+                {"Email"}: {userData.attributes["email"]}
+              </Text>
+            </Box>
+          </Center>
         </VStack>
         <VStack>
           <CredButton onPress={signOut}>Salir</CredButton>
         </VStack>
       </Flex>
-    </View>
+    </KeyboardAvoidingView>
   );
 }

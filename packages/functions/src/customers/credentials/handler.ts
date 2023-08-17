@@ -43,6 +43,10 @@ export const main: DynamoDBStreamHandler = async (
             Name: "custom:dni",
             Value: object.dni,
           },
+          {
+            Name: "custom:plan",
+            Value: object.plan,
+          },
         ],
       };
 

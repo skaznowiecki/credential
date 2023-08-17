@@ -19,9 +19,11 @@ import {
 
 export default function LoginScreen({ route, navigation }: Props<"LogIn">) {
   const [isValid, setIsValid] = useState(false);
+  const [user, setUser] = useState({});
+  const [isNew, setIsNew] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { signIn } = React.useContext(AuthContext) as AuthContextType;
+  const { signIn, newPass } = React.useContext(AuthContext) as AuthContextType;
 
   const {
     control,
@@ -31,16 +33,38 @@ export default function LoginScreen({ route, navigation }: Props<"LogIn">) {
     defaultValues: {
       email: "",
       password: "",
+      newPassword: "",
     },
   });
 
-  const onSubmit = async (data: LoginForm) => {
+  const onSubmit = async ({ email, password }: LoginForm) => {
     setIsLoading(true);
-    const user = await signIn(data);
-    if (user.challengeName === "NEW_PASSWORD_REQUIRED") {
-      navigation.navigate("NewPass", { email: data.email });
+    try {
+      const user = await Auth.signIn(email, password);
+      if (user.challengeName === "NEW_PASSWORD_REQUIRED") {
+        setUser(user);
+        setIsNew(true);
+      } else {
+        signIn(user);
+      }
+    } catch (error: any) {
+      Alert.alert("Error", error.message);
+    } finally {
+      setIsLoading(false);
     }
-    setIsLoading(false);
+  };
+
+  const onSubmitNewPassword = async ({ newPassword }: LoginForm) => {
+    setIsLoading(true);
+    try {
+      await Auth.completeNewPassword(user, newPassword);
+      newPass(user);
+    } catch (error: any) {
+      Alert.alert("Error", error.message);
+    } finally {
+      setIsNew(false);
+      setIsLoading(false);
+    }
   };
 
   function validateEmail(val: string): boolean {
@@ -62,7 +86,7 @@ export default function LoginScreen({ route, navigation }: Props<"LogIn">) {
       >
         <VStack>
           <CredBrand>Sanos Salud</CredBrand>
-          <CredHeading>Log in</CredHeading>
+          <CredHeading>Bienvenido</CredHeading>
           <Controller
             control={control}
             rules={{
@@ -91,6 +115,7 @@ export default function LoginScreen({ route, navigation }: Props<"LogIn">) {
               <CredInput
                 placeholder="Contraseña"
                 onBlur={onBlur}
+                type="password"
                 onChangeText={(val) => {
                   onChange(val);
                 }}
@@ -100,23 +125,61 @@ export default function LoginScreen({ route, navigation }: Props<"LogIn">) {
             name="password"
           />
         </VStack>
-        <VStack>
-        <CredButton
-            onPress={() => navigation.navigate("ForgotPass")}
-            isLoading={isLoading}
-            isLoadingText="Cargando..."
-          >
-            Recuperar contraseña
-          </CredButton>
-          <CredButton
-            onPress={handleSubmit(onSubmit)}
-            isDisabled={!isValid}
-            isLoading={isLoading}
-            isLoadingText="Cargando..."
-          >
-            Ingresar
-          </CredButton>
-        </VStack>
+
+        {isNew && (
+          <>
+            <VStack>
+              <Controller
+                control={control}
+                rules={{
+                  required: true,
+                }}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <CredInput
+                    placeholder="Nueva contraseña"
+                    onBlur={onBlur}
+                    type="text"
+                    onChangeText={(val) => {
+                      onChange(val);
+                    }}
+                    value={value}
+                    autoFocus
+                  />
+                )}
+                name="newPassword"
+              />
+            </VStack>
+            <VStack>
+              {/* <CredHelperText>Hola toca el boton</CredHelperText> */}
+              <CredButton
+                onPress={handleSubmit(onSubmitNewPassword)}
+                isLoading={isLoading}
+                isLoadingText="Cargando..."
+              >
+                Continuar
+              </CredButton>
+            </VStack>
+          </>
+        )}
+        {!isNew && (
+          <VStack>
+            <CredButton
+              onPress={() => navigation.navigate("ForgotPass")}
+              isLoading={isLoading}
+              isLoadingText="Cargando..."
+            >
+              Recuperar contraseña
+            </CredButton>
+            <CredButton
+              onPress={handleSubmit(onSubmit)}
+              isDisabled={!isValid}
+              isLoading={isLoading}
+              isLoadingText="Cargando..."
+            >
+              Ingresar
+            </CredButton>
+          </VStack>
+        )}
       </Flex>
     </KeyboardAvoidingView>
   );

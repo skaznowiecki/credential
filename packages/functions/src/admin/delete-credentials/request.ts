@@ -5,7 +5,7 @@ export type Request = {
 export type CredentialEsp = {
   Nombre: string;
   Apellido: string;
-  DNI: string;
+  DNI: number;
   Plan: string;
   Alta: Date;
   Email: string;

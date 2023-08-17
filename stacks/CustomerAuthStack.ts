@@ -33,6 +33,7 @@ export function CustomerAuthStack({ stack }: StackContext) {
         },
         customAttributes: {
           dni: new StringAttribute({ mutable: false }),
+          plan: new StringAttribute({ mutable: false }),
         },
         // email: UserPoolEmail.withSES({
         //   fromEmail: "no-reply@sanossalud.com",

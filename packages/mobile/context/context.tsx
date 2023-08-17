@@ -5,6 +5,7 @@ import React, { ComponentType } from "react";
 export type LoginForm = {
   email: string;
   password: string;
+  newPassword: string;
 };
 
 export type NewPassForm = {

@@ -17,8 +17,8 @@ const columns: GridColDef[] = [
   },
   { field: "name", headerName: "Nombre", width: 160 },
   { field: "lastName", headerName: "Apellido", width: 160 },
-  { field: "email", headerName: "Email", width: 230 },
-  { field: "plan", headerName: "Plan", width: 230 },
+  { field: "email", headerName: "Email", width: 250 },
+  { field: "plan", headerName: "Plan", width: 250 },
   {
     field: "createdAt",
     headerName: "Fecha Alta",
@@ -27,7 +27,6 @@ const columns: GridColDef[] = [
     valueGetter: ({ value }) => value && new Date(value).toLocaleDateString(),
   },
 ];
-
 function QuickSearchToolbar() {
   return (
     <Box

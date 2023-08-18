@@ -124,6 +124,9 @@ export default function CreateNewPasswordScreen({ route, navigation }: Props) {
           />
         </VStack>
         <VStack>
+          <CredHelperText>
+            La contraseña debe ser minimo de 8 caracteres y contener un numero
+          </CredHelperText>
           <CredButton
             onPress={handleSubmit(onSubmit)}
             isLoading={isLoading}

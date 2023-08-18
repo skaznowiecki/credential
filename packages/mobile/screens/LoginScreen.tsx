@@ -150,7 +150,9 @@ export default function LoginScreen({ route, navigation }: Props<"LogIn">) {
               />
             </VStack>
             <VStack>
-              {/* <CredHelperText>Hola toca el boton</CredHelperText> */}
+              <CredHelperText>
+                La contraseña debe ser minimo de 8 caracteres y contener un numero
+              </CredHelperText>
               <CredButton
                 onPress={handleSubmit(onSubmitNewPassword)}
                 isLoading={isLoading}

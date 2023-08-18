@@ -11,12 +11,10 @@ import { StartingPosition } from "aws-cdk-lib/aws-lambda";
 import * as iam from "aws-cdk-lib/aws-iam";
 import { PolicyStatement } from "aws-cdk-lib/aws-iam";
 import { StringAttribute } from "aws-cdk-lib/aws-cognito";
-import { MobileStack } from "./MobileStack.js";
 import { StorageStack } from "./StorageStack.js";
 
 export function CustomerAuthStack({ stack }: StackContext) {
   const { table } = use(StorageStack);
-  const { api } = use(MobileStack);
 
   const auth = new Cognito(stack, "Customer", {
     cdk: {
@@ -40,6 +38,9 @@ export function CustomerAuthStack({ stack }: StackContext) {
         //   fromName: "no-reply",
         //   sesVerifiedDomain: "sanossalud.com",
         // }),
+        autoVerify: {
+          email: true,
+        },
       },
 
       userPoolClient: {
@@ -81,8 +82,6 @@ export function CustomerAuthStack({ stack }: StackContext) {
   });
 
   auth.attachPermissionsForAuthUsers(stack, ["cognito-idp:*"]);
-  auth.attachPermissionsForAuthUsers(stack, [api, "dynamodb"]);
-  api.attachPermissions(["dynamodb:*"]);
 
   stack.addOutputs({
     UserPoolId: auth.userPoolId,

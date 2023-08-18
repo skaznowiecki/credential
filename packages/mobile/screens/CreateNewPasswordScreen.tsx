@@ -42,7 +42,8 @@ export default function CreateNewPasswordScreen({ route, navigation }: Props) {
     try {
       const user = await Auth.forgotPasswordSubmit(email, code, password);
       navigation.navigate("LogIn");
-    } catch (error) {
+    } catch (error: any) {
+      Alert.alert("Error", error.message);
     } finally {
       setIsLoading(false);
     }
@@ -63,7 +64,7 @@ export default function CreateNewPasswordScreen({ route, navigation }: Props) {
       >
         <VStack>
           <CredBrand>Sanos Salud</CredBrand>
-          <CredHeading>Ingrese su email</CredHeading>
+          <CredHeading>Nueva contraseña</CredHeading>
           <Controller
             control={control}
             rules={{
@@ -101,7 +102,7 @@ export default function CreateNewPasswordScreen({ route, navigation }: Props) {
               />
             )}
             name="code"
-          />{" "}
+          />
           <Controller
             control={control}
             rules={{
@@ -123,7 +124,6 @@ export default function CreateNewPasswordScreen({ route, navigation }: Props) {
           />
         </VStack>
         <VStack>
-          {/* <CredHelperText>Hola toca el boton</CredHelperText> */}
           <CredButton
             onPress={handleSubmit(onSubmit)}
             isLoading={isLoading}

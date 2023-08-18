@@ -13,17 +13,17 @@ const columns: GridColDef[] = [
     field: "dni",
     headerName: "DNI",
     type: "number",
-    width: 110,
+    width: 150,
   },
-  { field: "name", headerName: "Nombre", width: 130 },
-  { field: "lastName", headerName: "Apellido", width: 130 },
-  { field: "email", headerName: "Email", width: 180 },
-  { field: "plan", headerName: "Plan", width: 180 },
+  { field: "name", headerName: "Nombre", width: 160 },
+  { field: "lastName", headerName: "Apellido", width: 160 },
+  { field: "email", headerName: "Email", width: 230 },
+  { field: "plan", headerName: "Plan", width: 230 },
   {
     field: "createdAt",
     headerName: "Fecha Alta",
     type: "datetime",
-    width: 130,
+    width: 160,
     valueGetter: ({ value }) => value && new Date(value).toLocaleDateString(),
   },
 ];
@@ -61,6 +61,14 @@ export default function DataTable({ rows }: TableProps) {
         disableColumnMenu
         slots={{ toolbar: QuickSearchToolbar }}
         pageSizeOptions={[10, 15]}
+        sx={{
+          boxShadow: 4,
+          border: 1,
+          borderColor: 'primary.light',
+          '& .MuiDataGrid-cell:hover': {
+            color: 'primary.main',
+          },
+        }}
       />
 
   );

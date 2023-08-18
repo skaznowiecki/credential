@@ -1,9 +1,19 @@
 import React, { useEffect } from "react";
 import DataTable from "./DataTable";
-import { Box, Button, Grid, Paper, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  IconButton,
+  Paper,
+  Typography,
+} from "@mui/material";
 import * as XLSX from "xlsx";
 import { API } from "aws-amplify";
 import { onError } from "../lib/errorLib";
+import UploadIcon from "@mui/icons-material/Upload";
+import DownloadIcon from "@mui/icons-material/Download";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 export default function Home() {
   const [data, setData] = React.useState<boolean>(false);
@@ -18,16 +28,11 @@ export default function Home() {
       setRows(rows);
     };
 
-    const interval = setInterval(() => firstLoad(), 5000);
     try {
       firstLoad();
     } catch (e) {
       onError(e);
     }
-
-    return () => {
-      clearInterval(interval);
-    };
   }, [data]);
 
   const handleUpCredentials = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,6 +69,14 @@ export default function Home() {
     };
   };
 
+  const handleClickRefresh = async () => {
+    const result = await API.get("credentials", "/", {
+      headers: {},
+    });
+    const rows: Credentials[] = result;
+    setRows(rows);
+  };
+
   const upCredentials = async (info: any) => {
     try {
       await API.post("credentials", "/upload", {
@@ -94,34 +107,73 @@ export default function Home() {
         container
         direction="column"
         justifyContent="center"
-        alignItems="center"
+        alignItems="stretch"
       >
-        <Grid item xs={12}>
-          <Typography variant="h2">Afiliados</Typography>
+        <Grid
+          container
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Grid item>
+            <Typography
+              variant="h2"
+              alignContent={"center"}
+              paddingBottom={5}
+              sx={{ color: "primary.main" }}
+            >
+              Afiliados
+            </Typography>
+          </Grid>
         </Grid>
         <Grid
           container
           direction="row"
-          justifyContent="flex-end"
+          justifyContent="space-evenly"
           alignItems="center"
-          spacing={2}
+          spacing={3}
         >
           <Grid item>
-            <Button variant="contained" component="label">
+            <Button
+              variant="contained"
+              component="label"
+              startIcon={<UploadIcon fontSize="inherit" />}
+            >
               Alta afiliados
               <input type="file" hidden onChange={handleUpCredentials} />
             </Button>
           </Grid>
           <Grid item>
-            <Button variant="contained" component="label">
+            <Button
+              variant="contained"
+              component="label"
+              startIcon={<DownloadIcon fontSize="inherit" />}
+            >
               Baja afiliados
               <input type="file" hidden onChange={handleDownCredentials} />
             </Button>
           </Grid>
+          <Grid item>
+            <Button
+              variant="contained"
+              component="label"
+              onClick={handleClickRefresh}
+              startIcon={<RefreshIcon fontSize="inherit" />}
+            >
+              Recargar
+            </Button>
+          </Grid>
         </Grid>
-        <Box sx={{ mt: 1, borderColor: "secondary", border: "thin" }}>
+        <Box
+          sx={{
+            mt: 3,
+            borderColor: "secondary",
+            border: "thin",
+            width: "max-content",
+          }}
+        >
           <Paper elevation={3}>
-            <Grid item xs>
+            <Grid item>
               <DataTable rows={rows} />
             </Grid>
           </Paper>
@@ -152,4 +204,3 @@ export type Credentials = {
   unsubscribeDate?: Date | null;
   createdAt?: string;
 };
-

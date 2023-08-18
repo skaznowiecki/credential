@@ -10,10 +10,7 @@ import { useState } from "react";
 import { Auth } from "aws-amplify";
 import React from "react";
 import {
-  AuthContext,
-  AuthContextType,
   ForgotPassForm,
-  NewPassForm,
   RootStackParamList,
 } from "../context/context";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -23,24 +20,23 @@ type Props = NativeStackScreenProps<RootStackParamList, "ForgotPass">;
 export default function ForgotPasswordScreen({ route, navigation }: Props) {
   const [isLoading, setIsLoading] = useState(false);
 
-  const email = route.params?.email;
-
   const {
     control,
     handleSubmit,
     formState: { errors },
   } = useForm<ForgotPassForm>({
     defaultValues: {
-      email,
+      email: "",
     },
   });
 
   const onSubmit = async ({ email }: ForgotPassForm) => {
     setIsLoading(true);
     try {
-      const user = await Auth.forgotPassword(email);
+      await Auth.forgotPassword(email);
       navigation.navigate("CreateNewPass", { email });
-    } catch (error) {
+    } catch (error: any) {
+      Alert.alert("Error", error.message);
     } finally {
       setIsLoading(false);
     }
@@ -83,7 +79,6 @@ export default function ForgotPasswordScreen({ route, navigation }: Props) {
           />
         </VStack>
         <VStack>
-          {/* <CredHelperText>Hola toca el boton</CredHelperText> */}
           <CredButton
             onPress={handleSubmit(onSubmit)}
             isLoading={isLoading}

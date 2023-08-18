@@ -4,7 +4,7 @@ export function CredInput(props: IInputProps) {
   return (
     <Input
       borderWidth={0}
-      fontSize={35}
+      fontSize={25}
       paddingLeft={"0"}
       paddingBottom={15}
       fontWeight={"bold"}

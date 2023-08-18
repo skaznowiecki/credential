@@ -49,9 +49,12 @@ export const main: DynamoDBStreamHandler = async (
           },
         ],
       };
-
       const command = new AdminCreateUserCommand(params);
-      await client.send(command);
+      try {
+        await client.send(command);
+      } catch (error) {
+        console.log(error);
+      }
     } else if (record.eventName == "REMOVE") {
       let object = unmarshall(record.dynamodb.OldImage);
 
@@ -61,7 +64,11 @@ export const main: DynamoDBStreamHandler = async (
       };
 
       const command = new AdminDeleteUserCommand(params);
-      await client.send(command);
+      try {
+        await client.send(command);
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 };

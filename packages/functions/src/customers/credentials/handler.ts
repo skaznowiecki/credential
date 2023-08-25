@@ -47,6 +47,10 @@ export const main: DynamoDBStreamHandler = async (
             Name: "custom:plan",
             Value: object.plan,
           },
+          {
+            Name: "email_verified",
+            Value: "true",
+          },
         ],
       };
       const command = new AdminCreateUserCommand(params);

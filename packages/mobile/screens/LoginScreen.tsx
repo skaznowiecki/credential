@@ -151,7 +151,8 @@ export default function LoginScreen({ route, navigation }: Props<"LogIn">) {
             </VStack>
             <VStack>
               <CredHelperText>
-                La contraseña debe ser minimo de 8 caracteres y contener un numero
+                La contraseña debe ser minimo de 8 caracteres y contener un
+                numero
               </CredHelperText>
               <CredButton
                 onPress={handleSubmit(onSubmitNewPassword)}
@@ -165,13 +166,16 @@ export default function LoginScreen({ route, navigation }: Props<"LogIn">) {
         )}
         {!isNew && (
           <VStack>
-            <CredButton
-              onPress={() => navigation.navigate("ForgotPass")}
-              isLoading={isLoading}
-              isLoadingText="Cargando..."
-            >
-              Recuperar contraseña
-            </CredButton>
+            {!isLoading && (
+              <CredButton
+                onPress={() => navigation.navigate("ForgotPass")}
+                isLoading={isLoading}
+                isLoadingText="Cargando..."
+                bg={"blue.300"}
+              >
+                Recuperar contraseña
+              </CredButton>
+            )}
             <CredButton
               onPress={handleSubmit(onSubmit)}
               isDisabled={!isValid}

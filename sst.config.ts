@@ -1,9 +1,6 @@
-import { AdminAuthStack } from "./stacks/AdminAuthStack";
-import { CustomerAuthStack } from "./stacks/CustomerAuthStack";
-import { StorageStack } from "./stacks/StorageStack";
-import { HttpStack } from "./stacks/HttpStack";
-import { FrontendStack } from "./stacks/FrontendStack";
 import { SSTConfig } from "sst";
+import { AdminStack } from "./stacks/AdminStack";
+import { AppStack } from "./stacks/AppStack";
 
 export default {
   config(_input) {
@@ -13,11 +10,6 @@ export default {
     };
   },
   stacks(app) {
-    app
-      .stack(StorageStack)
-      .stack(HttpStack)
-      .stack(AdminAuthStack)
-      .stack(CustomerAuthStack)
-      .stack(FrontendStack);
+    app.stack(AdminStack).stack(AppStack);
   },
 } satisfies SSTConfig;

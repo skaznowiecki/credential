@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "name": "credential",
+    "slug": "credential",
+    "version": "0.0.0",
+    "sdkVersion": "49.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "android": {
+      "package": "com.anonymous.credential"
+    },
+    "ios": {
+      "bundleIdentifier": "com.anonymous.credential"
+    }
+  }
+}

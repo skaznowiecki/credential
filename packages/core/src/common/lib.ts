@@ -1,3 +1,4 @@
+
 interface ApiResponse {
   statusCode: number;
   body: string;
@@ -17,12 +18,24 @@ export const useApiResponse = (status: number, body: any): ApiResponse => {
 export const makeid = (length: number) => {
   let result = "";
   const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   const charactersLength = characters.length;
   let counter = 0;
   while (counter < length) {
     result += characters.charAt(Math.floor(Math.random() * charactersLength));
     counter += 1;
   }
-  return result;
+  const number = Math.floor(Math.random() * 100);
+  return `${result}${number}`;
+};
+
+export const decodeLastEvaluatedKey = (lastEvaluatedKeyEncoded: string): any => {
+  return JSON.parse(Buffer.from(lastEvaluatedKeyEncoded, 'base64').toString('ascii'));
+};
+
+export const encodeLastEvaluatedKey = (lastEvaluatedKey?: any): string | null => {
+  if (!lastEvaluatedKey) {
+    return null;
+  }
+  return Buffer.from(JSON.stringify(lastEvaluatedKey)).toString('base64');
 };

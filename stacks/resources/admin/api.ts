@@ -1,6 +1,6 @@
-import { Api, Table, Stack, Queue, Cognito } from "sst/constructs";
+import { Api, Table, Queue, Cognito, Stack } from "sst/constructs";
 
-export const setApi = (
+export const setAdminApi = (
   stack: Stack,
   auth: Cognito,
   affiliateTable: Table,

@@ -16,7 +16,12 @@ export interface CreateAffiliateMessage
   extends Omit<Affiliate, "createdAt" | "userId"> {
   type: "create";
 }
-
 export interface DeleteAffiliateMessage extends Pick<Affiliate, "dni"> {
   type: "delete";
+}
+
+
+export interface ListAffiliate {
+  items: Affiliate[];
+  nextToken: null | string;
 }

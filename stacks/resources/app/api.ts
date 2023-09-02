@@ -1,6 +1,6 @@
-import { Api, Table, Stack, Queue, Cognito } from "sst/constructs";
+import { Api, Table, Stack, Cognito } from "sst/constructs";
 
-export const setApi = (stack: Stack, auth: Cognito, affiliateTable: Table) => {
+export const setAppApi = (stack: Stack, auth: Cognito, affiliateTable: Table) => {
   return new Api(stack, "AppApi", {
     authorizers: {
       jwt: {
@@ -12,7 +12,7 @@ export const setApi = (stack: Stack, auth: Cognito, affiliateTable: Table) => {
       },
     },
     defaults: {
-      authorizer: "iam",
+      authorizer: "jwt",
       function: {
         bind: [affiliateTable],
       },

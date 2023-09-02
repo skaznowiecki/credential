@@ -1,5 +1,5 @@
 import { Cognito, Queue, Stack, Table, toCdkDuration } from "sst/constructs";
-import { Effect, PolicyStatement } from "aws-cdk-lib/aws-iam";
+import * as iam from "aws-cdk-lib/aws-iam";
 
 export const setQueue = (
   stack: Stack,
@@ -10,10 +10,14 @@ export const setQueue = (
     consumer: {
       function: {
         handler: "packages/functions/src/admin/affiliate/sync-queued.main",
+        environment: {
+          USER_POOL_ID: auth.userPoolId,
+          USER_POOL_CLIENT_ID: auth.userPoolClientId,
+        },
         bind: [affiliateTable],
         permissions: [
-          new PolicyStatement({
-            effect: Effect.ALLOW,
+          new iam.PolicyStatement({
+            effect: iam.Effect.ALLOW,
             actions: [
               "cognito-idp:AdminCreateUser",
               "cognito-idp:AdminDeleteUser",
@@ -32,6 +36,8 @@ export const setQueue = (
       },
     },
   });
+
+
 
   return queue;
 };

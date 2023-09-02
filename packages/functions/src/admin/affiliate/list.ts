@@ -1,8 +1,9 @@
 import { list } from "@credential/core/affiliate/service";
-import { ApiHandler } from "sst/node/api";
+import { ApiHandler, useQueryParam } from "sst/node/api";
 import { useApiResponse } from "@credential/core/common/lib";
 
 export const main = ApiHandler(async (event) => {
-  const affiliates = await list();
-  return useApiResponse(200, affiliates);
+  const nextToken = useQueryParam("nextToken") || null
+  const response = await list(nextToken);
+  return useApiResponse(200, response);
 });

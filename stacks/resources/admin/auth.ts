@@ -1,6 +1,6 @@
-import { Cognito, Stack } from "sst/constructs";
+import { Cognito, Stack  } from "sst/constructs";
 
-export const setAuth = (stack: Stack) => {
+export const setAdminAuth = (stack: Stack) => {
   return new Cognito(stack, "Admin", {
     cdk: {
       userPool: {

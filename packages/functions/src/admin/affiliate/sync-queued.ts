@@ -9,13 +9,11 @@ export const main: SQSHandler = async (event) => {
   const results = await Promise.all(
     event.Records.map((record) => processRecord(record))
   );
-
   const failures: SQSBatchItemFailure[] = results
     .filter((r) => r[0] === false)
     .map((r) => ({
       itemIdentifier: r[1]!,
     }));
-
   return {
     batchItemFailures: failures,
   };
@@ -34,9 +32,10 @@ const processRecord = async (
     } else if (body.type === "delete") {
       await destroy(body as DeleteAffiliateMessage);
     }
-  } catch {
+    return [true, null];
+  } catch (e) {
+    console.log(e)
     return [false, record.messageId];
   }
 
-  return [true, null];
 };

@@ -1,5 +1,4 @@
-import { Stack } from "sst/constructs";
-import { Table } from "sst/constructs";
+import { Table, Stack } from "sst/constructs";
 
 export const setTable = (stack: Stack) => {
   return new Table(stack, "Affiliate", {

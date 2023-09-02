@@ -4,6 +4,7 @@ import {
   Affiliate,
   CreateAffiliateMessage,
   DeleteAffiliateMessage,
+  ListAffiliate,
 } from "./entity";
 import { send } from "./queue";
 
@@ -24,13 +25,16 @@ export const create = async (attrs: CreateAffiliateMessage) => {
 
 export const destroy = async (attrs: DeleteAffiliateMessage) => {
   const { dni } = attrs;
-
-  await deleteAuthAffiliate(dni);
+  const affiliate = await repository.get(dni);
+  if (!affiliate) {
+    throw new Error("Affiliate not found");
+  }
+  await deleteAuthAffiliate(affiliate.email);
   await repository.destroy(dni);
 };
 
-export const list = async (): Promise<Affiliate[]> => {
-  return repository.list();
+export const list = async (nextToken: null | string): Promise<ListAffiliate> => {
+  return repository.list(nextToken);
 };
 
 export const get = async (dni: string): Promise<Affiliate> => {

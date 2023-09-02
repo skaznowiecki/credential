@@ -1,6 +1,6 @@
 import { Cognito, Stack, toCdkDuration } from "sst/constructs";
 
-export const setAuth = (stack: Stack) => {
+export const setAppAuth = (stack: Stack) => {
   return new Cognito(stack, "AppAuth", {
     triggers: {
       preTokenGeneration: {

@@ -7,17 +7,20 @@ export const setAppApi = (
   affiliateTable: Table
 ) => {
   return new Api(stack, "AppApi", {
-    customDomain: {
-      domainName: "api.sanos.app",
-      hostedZone: "sanos.app",
-      cdk: {
-        certificate: Certificate.fromCertificateArn(
-          stack,
-          "ApiCertificate",
-          process.env.AWS_CERTIFICATE_ARN!
-        ),
-      },
-    },
+    customDomain:
+      stack.stage === "prod"
+        ? {
+            domainName: "api.sanos.app",
+            hostedZone: "sanos.app",
+            cdk: {
+              certificate: Certificate.fromCertificateArn(
+                stack,
+                "ApiCertificate",
+                process.env.AWS_CERTIFICATE_ARN!
+              ),
+            },
+          }
+        : undefined,
     authorizers: {
       jwt: {
         type: "user_pool",

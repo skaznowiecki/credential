@@ -1,4 +1,5 @@
-import { Cognito, Stack  } from "sst/constructs";
+import { UserPoolEmail } from "aws-cdk-lib/aws-cognito";
+import { Cognito, Stack } from "sst/constructs";
 
 export const setAdminAuth = (stack: Stack) => {
   return new Cognito(stack, "Admin", {
@@ -8,6 +9,11 @@ export const setAdminAuth = (stack: Stack) => {
         autoVerify: {
           email: true,
         },
+        email: UserPoolEmail.withSES({
+          fromEmail: "no-replay@sanos.app",
+          fromName: "Notification",
+          sesVerifiedDomain: "sanos.app",
+        }),
       },
     },
     login: ["email"],

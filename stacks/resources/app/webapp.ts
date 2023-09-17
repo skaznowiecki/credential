@@ -8,17 +8,20 @@ export const setWebApp = (
   region: string
 ) => {
   return new StaticSite(stack, "AppSite", {
-    customDomain: {
-      domainName: "sanos.app",
-      hostedZone: "sanos.app",
-      cdk: {
-        certificate: Certificate.fromCertificateArn(
-          stack,
-          "WebAppCertificate",
-          process.env.AWS_CERTIFICATE_ARN!
-        ),
-      },
-    },
+    customDomain:
+      stack.stage === "prod"
+        ? {
+            domainName: "sanos.app",
+            hostedZone: "sanos.app",
+            cdk: {
+              certificate: Certificate.fromCertificateArn(
+                stack,
+                "WebAppCertificate",
+                process.env.AWS_CERTIFICATE_ARN!
+              ),
+            },
+          }
+        : undefined,
     path: "packages/app",
     buildCommand: "pnpm run build",
     buildOutput: "dist",

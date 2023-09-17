@@ -8,17 +8,20 @@ export const setAdminWebApp = (
   region: string
 ) => {
   return new StaticSite(stack, "ReactSite", {
-    customDomain: {
-      domainName: "backoffice.sanos.app",
-      hostedZone: "sanos.app",
-      cdk: {
-        certificate: Certificate.fromCertificateArn(
-          stack,
-          "BackoficeCertificate",
-          process.env.AWS_CERTIFICATE_ARN!
-        ),
-      },
-    },
+    customDomain:
+      stack.stage === "prod"
+        ? {
+            domainName: "backoffice.sanos.app",
+            hostedZone: "sanos.app",
+            cdk: {
+              certificate: Certificate.fromCertificateArn(
+                stack,
+                "BackoficeCertificate",
+                process.env.AWS_CERTIFICATE_ARN!
+              ),
+            },
+          }
+        : undefined,
     path: "packages/backoffice",
     buildCommand: "pnpm run build",
     buildOutput: "dist",

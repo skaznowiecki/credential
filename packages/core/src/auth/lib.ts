@@ -1,5 +1,5 @@
 import { Auth } from "./entity";
 
 export const useAuth = (event: any): Auth => {
-  return event.requestContext.authorizer.jwt.claims;
+  return { userId: event.requestContext.authorizer.jwt.claims["cognito:username"] };
 };

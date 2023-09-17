@@ -1,28 +1,33 @@
 <template>
-  <div class="d-flex align-center justify-center" style="height: 100vh">
-    <v-sheet width="400" class="mx-auto">
-      <ErrorDisplay :error="errorMessage" />
-      <ResetPasswordForm
-        @submit="submitResetPassword"
-        v-if="!changePassword"
-        :loading="loading"
-      />
-      <ChangePasswordForm
-        :email="email"
-        @submit="submitChangePassword"
-        v-else
-        :loading="loading"
-      />
-      <div class="mt-2">
-        <p class="text-body-2">
+  <AuthLayout>
+    <ErrorDisplay :error="errorMessage" />
+    <ResetPasswordForm
+      @submit="submitResetPassword"
+      v-if="!changePassword"
+      :loading="loading"
+    />
+    <ChangePasswordForm
+      :email="email"
+      @submit="submitChangePassword"
+      v-else
+      :loading="loading"
+    />
+    <VCol cols="12">
+      <v-divider :thickness="2" class="border-opacity-100"></v-divider>
+    </VCol>
+
+    <VRow>
+      <VCol cols="12">
+        <VBtn @click="router.push({ name: 'SignIn' })" block variant="outlined">
           Ya tenes cuenta?
-          <RouterLink :to="{ name: 'SignIn' }">Ingresar</RouterLink>
-        </p>
-      </div>
-    </v-sheet>
-  </div>
+        </VBtn>
+      </VCol>
+    </VRow>
+  </AuthLayout>
 </template>
 <script setup>
+import AuthLayout from "@/layouts/AuthLayout.vue";
+
 import ErrorDisplay from "@/components/shared/ErrorDisplay.vue";
 import ChangePasswordForm from "@/components/auth/ChangePasswordForm.vue";
 import ResetPasswordForm from "@/components/auth/ResetPasswordForm.vue";

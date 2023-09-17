@@ -1,7 +1,23 @@
+import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
 import { Api, Table, Stack, Cognito } from "sst/constructs";
 
-export const setAppApi = (stack: Stack, auth: Cognito, affiliateTable: Table) => {
+export const setAppApi = (
+  stack: Stack,
+  auth: Cognito,
+  affiliateTable: Table
+) => {
   return new Api(stack, "AppApi", {
+    customDomain: {
+      domainName: "api.sanos.app",
+      hostedZone: "sanos.app",
+      cdk: {
+        certificate: Certificate.fromCertificateArn(
+          stack,
+          "ApiCertificate",
+          process.env.AWS_CERTIFICATE_ARN!
+        ),
+      },
+    },
     authorizers: {
       jwt: {
         type: "user_pool",

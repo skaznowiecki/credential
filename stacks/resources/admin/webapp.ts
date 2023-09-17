@@ -1,3 +1,4 @@
+import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
 import { Cognito, StaticSite, Stack } from "sst/constructs";
 
 export const setAdminWebApp = (
@@ -7,6 +8,17 @@ export const setAdminWebApp = (
   region: string
 ) => {
   return new StaticSite(stack, "ReactSite", {
+    customDomain: {
+      domainName: "backoffice.sanos.app",
+      hostedZone: "sanos.app",
+      cdk: {
+        certificate: Certificate.fromCertificateArn(
+          stack,
+          "BackoficeCertificate",
+          process.env.AWS_CERTIFICATE_ARN!
+        ),
+      },
+    },
     path: "packages/backoffice",
     buildCommand: "pnpm run build",
     buildOutput: "dist",

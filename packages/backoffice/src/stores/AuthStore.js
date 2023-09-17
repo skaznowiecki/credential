@@ -12,7 +12,7 @@ export const useAuthStore = defineStore("AuthStore", {
     };
   },
   getters: {
-    isLoggedIn: (state) => {
+    isLoggedIn: async (state) => {
       return state.user.sub !== undefined;
     },
   },

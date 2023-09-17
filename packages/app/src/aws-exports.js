@@ -1,4 +1,5 @@
 import { Auth } from "aws-amplify";
+
 export const awsconfig = {
   aws_project_region: import.meta.env.VITE_APP_REGION,
   Auth: {

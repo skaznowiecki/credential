@@ -1,23 +1,35 @@
 <template>
   <AuthLayout>
-
-    <div class="mb-10">
-      <VImg :src="Logo" height="100"></VImg>
-    </div>
-
     <ErrorDisplay :error="errorMessage" />
-    <SignInForm @submit="signIn" v-if="!needToPasswordChange" :loading="loading" />
-    <CreatePasswordForm :email="email" @submitPassword="createPassword" v-else :loading="loading" />
-    <div class="mt-2">
-      <p class="text-body-2">
-        Te olvidaste la contraseña?
-        <RouterLink :to="{ name: 'ResetPassword' }">Restablecer</RouterLink>
-      </p>
-    </div>
+    <SignInForm
+      @submit="signIn"
+      v-if="!needToPasswordChange"
+      :loading="loading"
+    />
+    <CreatePasswordForm
+      :email="email"
+      @submitPassword="createPassword"
+      v-else
+      :loading="loading"
+    />
+
+    <VCol cols="12">
+      <v-divider :thickness="2" class="border-opacity-100"></v-divider>
+    </VCol>
+    <VRow>
+      <VCol cols="12">
+        <VBtn
+          @click="router.push({ name: 'ResetPassword' })"
+          block
+          variant="outlined"
+        >
+          Te olvidaste la contraseña?
+        </VBtn>
+      </VCol>
+    </VRow>
   </AuthLayout>
 </template>
 <script setup>
-import Logo from "@/assets/logo.png";
 import ErrorDisplay from "@/components/shared/ErrorDisplay.vue";
 import AuthLayout from "@/layouts/AuthLayout.vue";
 import SignInForm from "@/components/auth/SignInForm.vue";

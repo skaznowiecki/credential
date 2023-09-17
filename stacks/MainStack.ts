@@ -21,7 +21,6 @@ export function MainStack({ stack, app }: StackContext) {
   const adminUrl = adminApi.customDomainUrl || adminApi.url;
   const appUrl = appApi.customDomainUrl || appApi.url;
 
-
   setAdminWebApp(stack, adminAuth, adminUrl, app.region);
   setWebApp(stack, appAuth, appUrl, app.region);
 }

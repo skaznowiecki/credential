@@ -1,26 +1,66 @@
 <template>
-    <AppLayout>
-        <CredentialCard :affiliate="affiliate" v-if="affiliate != null" />
-    </AppLayout>
+  <AppLayout>
+    <VRow>
+      <VCol cols="12">
+        <v-btn
+          block
+          variant="outlined"
+          prepend-icon="mdi-whatsapp"
+          @click="openWhatsapp"
+        >
+          Escribinos por whatsapp
+        </v-btn>
+      </VCol>
+
+      <VCol cols="12">
+        <v-btn
+          block
+          variant="outlined"
+          prepend-icon="mdi-phone"
+          @click="openPhone('08103450622')"
+        >
+          0810 345 0622
+        </v-btn>
+      </VCol>
+
+      <VCol cols="12">
+        <v-divider :thickness="2" class="border-opacity-100"></v-divider>
+      </VCol>
+      <VCol cols="12">
+        <v-btn
+          block
+          color="red"
+          prepend-icon="mdi-phone"
+          @click="openPhone('08008887266')"
+          >Emergencias 0800 888 7266
+        </v-btn>
+      </VCol>
+      <VCol cols="12">
+        <v-btn
+          block
+          variant="outlined"
+          prepend-icon="mdi-email"
+          @click="openEmail('info@sanossalud.com.ar')"
+        >
+          info@sanossalud.com.ar
+        </v-btn>
+      </VCol>
+    </VRow>
+  </AppLayout>
 </template>
 
 <script setup>
-import { API } from 'aws-amplify'
-import { ref, onMounted } from 'vue'
+import AppLayout from "@/layouts/AppLayout.vue";
 
-import AppLayout from '@/layouts/AppLayout.vue'
-import CredentialCard from '@/components/credential/CredentialCard.vue';
+const openWhatsapp = () => {
+  window.open("https://wa.me/1171403926", "_blank");
+};
 
+const openPhone = (number) => {
+  window.open(`tel:${number}`, "_blank");
+};
 
-let affiliate = ref(null)
-
-const fetchAffiliate = async () => {
-    const response = await API.get('api', '/affiliates')
-    affiliate.value = response
-}
-
-onMounted(() => {
-    fetchAffiliate()
-})
-
+const openEmail = (email) => {
+  window.open(`mailto:${email}`, "_blank");
+};
 </script>

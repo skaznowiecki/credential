@@ -4,21 +4,32 @@ import SignInView from "@/views/sign-up/SignInView.vue";
 import ResetPasswordView from "@/views/sign-up/ResetPasswordView.vue";
 
 import HomeView from "@/views/HomeView.vue";
+import PhoneView from "@/views/PhoneView.vue";
 
-import { useAuthStore } from "@/stores/AuthStore";
+import { Auth } from "aws-amplify";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'Home',
+      path: "/",
+      name: "Home",
       component: HomeView,
       meta: {
         section: "credential",
         requiresAuth: true,
-        title: "Credencial",
-      }
+        title: "Mi credencial",
+      },
+    },
+    {
+      path: "/phones",
+      name: "Phone",
+      component: PhoneView,
+      meta: {
+        section: "phones",
+        requiresAuth: true,
+        title: "Teléfonos útiles",
+      },
     },
     {
       path: "/sign-in",
@@ -43,10 +54,19 @@ const router = createRouter({
 
 const DEFAULT_TITLE = "Facturas";
 
-router.beforeEach((to) => {
-  const store = useAuthStore();
+router.beforeEach(async (to) => {
   document.title = to.meta.title || DEFAULT_TITLE;
-  if (to.meta.requiresAuth === true && !store.isLoggedIn) return "/sign-in";
+
+  if (!to.meta.requiresAuth) {
+    return;
+  }
+
+  try {
+    await Auth.currentSession();
+  } catch (error) {
+    return "/sign-in";
+  }
+  return;
 });
 
 export default router;

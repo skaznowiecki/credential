@@ -5,9 +5,10 @@ import { Amplify, API } from "aws-amplify";
 
 import App from "./App.vue";
 import router from "./router";
-import "@mdi/font/css/materialdesignicons.css";
 
+import "@mdi/font/css/materialdesignicons.css";
 import "vuetify/styles";
+
 import { aliases, mdi } from "vuetify/iconsets/mdi";
 
 import { createVuetify } from "vuetify";

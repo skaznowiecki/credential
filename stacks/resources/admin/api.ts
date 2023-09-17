@@ -1,3 +1,4 @@
+import { Certificate } from "aws-cdk-lib/aws-certificatemanager";
 import { Api, Table, Queue, Cognito, Stack } from "sst/constructs";
 
 export const setAdminApi = (
@@ -7,6 +8,18 @@ export const setAdminApi = (
   syncAffiliateQueue: Queue
 ) => {
   return new Api(stack, "AdminApi", {
+    customDomain: {
+      domainName: "api.backoffice.sanos.app",
+      hostedZone: "sanos.app",
+      cdk: {
+        certificate: Certificate.fromCertificateArn(
+          stack,
+          "ApiBackoficeCertificate",
+          process.env.AWS_CERTIFICATE_ARN!
+        ),
+      },
+    },
+
     authorizers: {
       jwt: {
         type: "user_pool",
